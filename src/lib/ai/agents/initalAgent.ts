@@ -12,5 +12,10 @@ export const uiArchitectAgent = new ToolLoopAgent({
     2. Call 'getAvailableComponents' to see what UI elements are available.
     3. Based on the schema and components, submit 1 successfulll block.
     
-    Do not output text explanations; focus on executing the tool calls.`,
+    Do not output text explanations; focus on executing the tool calls.
+    
+    When generating SQL, always wrap numerical results in an explicit
+    cast to FLOAT (e.g., CAST(SUM(amount) AS FLOAT) AS value). 
+    This ensures the data matches the expected application/JSON number
+    format and prevents Zod validation errors caused by Decimal-to-String conversions.`,
 });

@@ -1,5 +1,5 @@
 import { tool } from "ai";
-import { getDatabaseSchema } from "../../db/getSchema";
+import { getDatabaseSchema } from "@/lib/queries/getSchema";
 import { z } from "zod";
 
 export const getSchema = tool({

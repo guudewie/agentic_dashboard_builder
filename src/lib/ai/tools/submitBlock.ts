@@ -3,6 +3,7 @@ import { componentRegistry } from "@/lib/registry/componentRegistry";
 import { z } from "zod";
 import { db } from "@/lib/connections/db";
 import { Block } from "@/types/types";
+import fs from "node:fs/promises";
 
 export interface SubmitBlockOutput {
   success: boolean;
@@ -59,10 +60,28 @@ export const submitBlock = tool({
         subtitle,
       };
 
+      // push all result for analysis
+      const allBlocks =
+        await import("../../../lib/data/blockSubmissionsData.json").then(
+          (m) => m.default,
+        );
+      allBlocks.push({
+        id: validatedBlock.id,
+        date: Date.now.toString(),
+        success: JSON.stringify(validationResult.success),
+        componentId,
+        query,
+        explanation,
+      });
+      fs.writeFile(
+        "./src/lib/data/blockSubmissionsData.json",
+        JSON.stringify(allBlocks, null, 2),
+      );
+
       if (!validationResult.success) {
         return {
           success: false,
-          error: `Query returned data that doesn't match ${component.label} format`,
+          error: `Query returned data that doesn't match ${component.dataSchemaString} format`,
           // potentially to be inlcuded, but seems to waste a lot of tokens
           // validationErrors: validationResult.error.issues,
           block: null,

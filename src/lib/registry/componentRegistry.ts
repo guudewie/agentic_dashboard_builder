@@ -9,7 +9,7 @@ import dynamic from "next/dynamic";
 export const CategoryValueDataSchema = z.array(
   z.object({
     label: z.string().describe("The category name or time period"),
-    value: z.number().describe("The numerical metric to display"),
+    value: z.coerce.number().describe("The numerical metric to display"),
   }),
 );
 export type BarChartData = z.infer<typeof CategoryValueDataSchema>;
@@ -19,7 +19,7 @@ export const SingleValueSchema = z
   .array(
     z.object({
       label: z.string().describe("Metric the value represents"),
-      value: z.number().describe("value to display"),
+      value: z.coerce.number().describe("value to display"),
     }),
   )
   .length(1);
