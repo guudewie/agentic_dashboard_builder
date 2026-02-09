@@ -67,7 +67,7 @@ export const submitBlock = tool({
         );
       allBlocks.push({
         id: validatedBlock.id,
-        date: Date.now.toString(),
+        date: new Date().toISOString(),
         success: JSON.stringify(validationResult.success),
         componentId,
         query,

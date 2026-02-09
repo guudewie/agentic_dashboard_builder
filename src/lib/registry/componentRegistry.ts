@@ -36,7 +36,7 @@ export const componentRegistry = [
     label: "Bar Chart",
     description: "Compares quantities across categories.",
     component: dynamic(
-      () => import("@/components/dashboardComponents/BarChartComp"),
+      () => import("@/components/dashboardCharts/BarChartComp"),
     ),
     dataSchemaString: "Array<{ label: string, value: number }>",
     dataSchema: CategoryValueDataSchema,
@@ -46,7 +46,7 @@ export const componentRegistry = [
     label: "KPI Card",
     description: "Displays a single high-level metric.",
     component: dynamic(
-      () => import("@/components/dashboardComponents/KpiCardComp"),
+      () => import("@/components/dashboardCharts/KpiCardComp"),
     ),
     dataSchemaString: "Array<{ value: number }>",
     dataSchema: SingleValueSchema,

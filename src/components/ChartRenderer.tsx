@@ -30,13 +30,6 @@ export function ChartRenderer({ block }: ChartRendererProps) {
 
   return (
     <div>
-      <div className="mb-3">
-        <h3 className="text-lg font-semibold text-gray-900">
-          {componentDef.label}
-        </h3>
-        <p className="text-sm text-gray-500">{componentDef.description}</p>
-      </div>
-
       {/* Render the dynamic component with data and label */}
       <Component block={block} />
     </div>
