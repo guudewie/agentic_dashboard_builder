@@ -12,6 +12,10 @@ interface DashboardProps {
   onAddBlocks: (blocks: Block[]) => void;
 }
 
+const GRID_COLUMNS = 12;
+const ROW_HEIGHT = 100;
+const GAP = 16;
+
 export function Dashboard({
   blocks,
   onClear,
@@ -19,6 +23,12 @@ export function Dashboard({
   onSelectBlock,
   onAddBlocks,
 }: DashboardProps) {
+  // Calculate the total rows needed
+  const maxRow = blocks.reduce((max, block) => {
+    if (!block.position) return max;
+    return Math.max(max, block.position.row + block.position.height);
+  }, 0);
+
   return (
     <div className="h-full bg-gray-50 flex flex-col">
       <div className="p-4 border-b border-gray-200 bg-white">
@@ -54,21 +64,62 @@ export function Dashboard({
       </div>
 
       <div className="flex-1 overflow-y-auto p-4">
-        <div className="grid gap-4">
-          {blocks.map((block) => (
-            <div
-              key={block.id}
-              onClick={() => onSelectBlock(block.id)}
-              className={`cursor-pointer transition-all rounded-lg ${
-                selectedBlockId === block.id
-                  ? "ring-2 ring-blue-500 shadow-lg"
-                  : "hover:shadow-md"
-              }`}
-            >
-              <ChartRenderer block={block} />
-            </div>
-          ))}
-        </div>
+        {/* Grid-based layout when blocks have positions */}
+        {blocks.some((block) => block.position) ? (
+          <div
+            className="relative"
+            style={{
+              display: "grid",
+              gridTemplateColumns: `repeat(${GRID_COLUMNS}, 1fr)`,
+              gridTemplateRows: `repeat(${maxRow}, ${ROW_HEIGHT}px)`,
+              gap: `${GAP}px`,
+              minHeight: `${maxRow * ROW_HEIGHT + (maxRow - 1) * GAP}px`,
+            }}
+          >
+            {blocks.map((block) => {
+              const pos = block.position;
+
+              return (
+                <div
+                  key={block.id}
+                  onClick={() => onSelectBlock(block.id)}
+                  className={`cursor-pointer transition-all rounded-lg ${
+                    selectedBlockId === block.id
+                      ? "ring-2 ring-blue-500 shadow-lg"
+                      : "hover:shadow-md"
+                  }`}
+                  style={
+                    pos
+                      ? {
+                          gridColumn: `${pos.col + 1} / span ${pos.width}`,
+                          gridRow: `${pos.row + 1} / span ${pos.height}`,
+                        }
+                      : undefined
+                  }
+                >
+                  <ChartRenderer block={block} />
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          /* Fallback to simple stacked layout when no positions */
+          <div className="grid gap-4">
+            {blocks.map((block) => (
+              <div
+                key={block.id}
+                onClick={() => onSelectBlock(block.id)}
+                className={`cursor-pointer transition-all rounded-lg ${
+                  selectedBlockId === block.id
+                    ? "ring-2 ring-blue-500 shadow-lg"
+                    : "hover:shadow-md"
+                }`}
+              >
+                <ChartRenderer block={block} />
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

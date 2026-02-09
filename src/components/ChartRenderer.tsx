@@ -29,9 +29,9 @@ export function ChartRenderer({ block }: ChartRendererProps) {
   const Component = componentDef.component;
 
   return (
-    <div>
+    <>
       {/* Render the dynamic component with data and label */}
       <Component block={block} />
-    </div>
+    </>
   );
 }

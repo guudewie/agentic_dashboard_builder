@@ -8,4 +8,10 @@ export type Block<T = AllInputTypesType> = {
   explanation: string;
   title: string;
   subtitle?: string;
+  position?: {
+    row: number;
+    col: number;
+    width: number;
+    height: number;
+  };
 };

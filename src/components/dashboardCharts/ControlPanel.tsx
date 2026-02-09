@@ -107,6 +107,20 @@ export function ControlPanel({ selectedBlock }: ControlPanelProps) {
                 </div>
               </div>
             )}
+
+            {/* Position */}
+            {selectedBlock.position && (
+              <div>
+                <label className="text-sm font-medium text-gray-700 block mb-2">
+                  Layout Values
+                </label>
+                <div className="px-3 py-2 bg-gray-50 rounded-lg border border-gray-200 max-h-64 overflow-auto">
+                  <pre className="text-xs text-gray-900 font-mono">
+                    {JSON.stringify(selectedBlock.position, null, 2)}
+                  </pre>
+                </div>
+              </div>
+            )}
           </div>
         ) : (
           <div className="flex items-center justify-center h-full text-gray-400">

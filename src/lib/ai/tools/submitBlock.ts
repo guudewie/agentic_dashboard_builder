@@ -26,8 +26,21 @@ export const submitBlock = tool({
     subtitle: z
       .string()
       .describe("The sub-title of the chart to be displayed in the UI"),
+    position: z.object({
+      row: z.number().describe("Starting row (0-indexed)"),
+      col: z.number().describe("Starting column (0-11 for 12-column grid)"),
+      width: z.number().describe("Width in columns (1-12)"),
+      height: z.number().describe("Height in rows (typically 2-6)"),
+    }),
   }),
-  execute: async ({ componentId, query, explanation, title, subtitle }) => {
+  execute: async ({
+    componentId,
+    query,
+    explanation,
+    title,
+    subtitle,
+    position,
+  }) => {
     try {
       const component = componentRegistry.find(
         (comp) => comp.id === componentId,
@@ -45,9 +58,6 @@ export const submitBlock = tool({
       const result = await db.query(query);
       const data = result.rows;
 
-      console.log("Query result:", data);
-      console.log("Query:", query);
-
       const validationResult = component.dataSchema.safeParse(data);
 
       const validatedBlock: Block = {
@@ -58,7 +68,10 @@ export const submitBlock = tool({
         explanation,
         title,
         subtitle,
+        position,
       };
+
+      console.log(JSON.stringify(validatedBlock));
 
       // push all result for analysis
       const allBlocks =
